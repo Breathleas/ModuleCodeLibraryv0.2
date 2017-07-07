@@ -20,6 +20,8 @@
 "modulecodedemo v0.2\stm32f1xx_hal_i2c.o"
 "modulecodedemo v0.2\stm32f1xx_hal.o"
 "modulecodedemo v0.2\stm32f1xx_hal_flash.o"
+"modulecodedemo v0.2\stm32f1xx_hal_tim.o"
+"modulecodedemo v0.2\stm32f1xx_hal_tim_ex.o"
 "modulecodedemo v0.2\system_stm32f1xx.o"
 --library_type=microlib --strict --scatter "ModuleCodeDemo v0.2\ModuleCodeDemo v0.sct"
 --diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols

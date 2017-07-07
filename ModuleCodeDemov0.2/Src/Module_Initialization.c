@@ -1,9 +1,13 @@
 
 #include "Module_MemMap.h"
 #include "Module_Initialization.h"
+#include "utilities.h"
+#include "constant.h"
 
-void Module_Init(void)
+void Module_Init(ADC_HandleTypeDef *hadc)
 {
+	extern ADC_HandleTypeDef hadc1;
+	
 	Internal_Write_MemMap(0,0x11);     //identifier   QSFP28
 	Internal_Write_MemMap(1,0x00);     //Revision not specified
 	Internal_Write_MemMap(2,0x07);     //IntL 高， 无多 Page， Data Not Ready 高
@@ -20,6 +24,9 @@ void Module_Init(void)
 	// 15-18 保留位
 	// 19-21 随意
 	//在utilities中需要这些函数
+	uint16_t temperature = GetTemperature(hadc);
+	Internal_Write_MemMap(22,((uint8_t)(temperature/256)));
+	Internal_Write_MemMap(23,((uint8_t)(temperature & CLEAR_HIGHER_BIT)));
   //GetTemperature() -> 22,23
 	//GetSupplyVoltage() -> 26,27
 	// 28-29 保留位

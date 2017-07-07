@@ -40,7 +40,10 @@
 #include "stm32f1xx_hal.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "constant.h"
+#include "Module_Slave_I2C.h"
+#include "Module_MemMap.h"
+#include "Module_Initialization.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -103,7 +106,11 @@ int main(void)
   MX_ADC2_Init();
 
   /* USER CODE BEGIN 2 */
-
+	Module_Init(&hadc1);
+	if(hi2c1.State == HAL_I2C_STATE_READY)
+	{
+		I2C_Slave_Transreceiver_IT_Iniitialize(&hi2c1);
+	}
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -182,7 +189,7 @@ static void MX_ADC1_Init(void)
     */
   hadc1.Instance = ADC1;
   hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;

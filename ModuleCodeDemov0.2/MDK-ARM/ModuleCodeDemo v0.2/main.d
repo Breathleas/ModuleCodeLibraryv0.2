@@ -27,3 +27,7 @@ modulecodedemo v0.2\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_fl
 modulecodedemo v0.2\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 modulecodedemo v0.2\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 modulecodedemo v0.2\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+modulecodedemo v0.2\main.o: ../Inc/constant.h
+modulecodedemo v0.2\main.o: ../Inc/Module_Slave_I2C.h
+modulecodedemo v0.2\main.o: ../Inc/Module_MemMap.h
+modulecodedemo v0.2\main.o: ../Inc/Module_Initialization.h

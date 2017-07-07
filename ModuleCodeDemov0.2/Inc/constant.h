@@ -25,4 +25,6 @@
 #define PASSWORD_ENTRY_AREA                   123
 #define PAGE_SELECT_BYTE                      127
 
+#define CLEAR_HIGHER_BIT                      0x00FF
+
 #endif
