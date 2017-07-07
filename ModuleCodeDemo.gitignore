@@ -1,0 +1,8 @@
+# ignore files
+ModuleCodeDemov0.2/Drivers/
+
+ModuleCodeDemov0.2/MDK-ARM/DebugConfig
+
+ModuleCodeDemov0.2/MDK-ARM/ModuleCodeDemov0.2/
+
+ModuleCodeDemov0.2/MDK-ARM/RTE/
