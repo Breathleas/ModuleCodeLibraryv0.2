@@ -7,6 +7,7 @@
 "modulecodedemo v0.2\module_slave_i2c.o"
 "modulecodedemo v0.2\utilities.o"
 "modulecodedemo v0.2\module_master_driver_i2c.o"
+"modulecodedemo v0.2\module_master_cdr.o"
 "modulecodedemo v0.2\startup_stm32f103xe.o"
 "modulecodedemo v0.2\stm32f1xx_hal_flash_ex.o"
 "modulecodedemo v0.2\stm32f1xx_hal_gpio.o"

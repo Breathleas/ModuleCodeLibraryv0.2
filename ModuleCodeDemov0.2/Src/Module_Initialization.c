@@ -8,6 +8,8 @@ void Module_Init(ADC_HandleTypeDef *hadc)
 {
 	extern ADC_HandleTypeDef hadc1;
 	
+	Assert_IntL();
+	
 	Internal_Write_MemMap(0,0x11);     //identifier   QSFP28
 	Internal_Write_MemMap(1,0x00);     //Revision not specified
 	Internal_Write_MemMap(2,0x07);     //IntL 高， 无多 Page， Data Not Ready 高
@@ -37,5 +39,8 @@ void Module_Init(ADC_HandleTypeDef *hadc)
 	// 58-65 保留位
 	// 66-81 随意
 	// 82-85 保留位
+	
+	
+	Deassert_IntL();
 }
 

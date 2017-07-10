@@ -419,6 +419,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\Module_Master_Driver_I2C.c</FilePath>
             </File>
+            <File>
+              <FileName>Module_Master_CDR.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\Module_Master_CDR.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

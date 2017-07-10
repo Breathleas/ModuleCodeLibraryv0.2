@@ -44,3 +44,19 @@ uint8_t GetTx_Pin_DIS(I2C_HandleTypeDef *hi2c)
 {
   return HAL_GPIO_ReadPin(Tx_DSBL_GPIO_Port, Tx_DSBL_Pin);
 }
+
+void Assert_IntL(void)
+{
+	HAL_GPIO_WritePin(IntL_GPIO_Port, IntL_Pin, GPIO_PIN_RESET);
+}
+
+void Deassert_IntL(void)
+{
+	HAL_GPIO_WritePin(IntL_GPIO_Port, IntL_Pin, GPIO_PIN_SET);
+}
+
+uint8_t IsModSelL(void)                //1不接受数据，0接收数据
+{
+	return HAL_GPIO_ReadPin(ModSelL_GPIO_Port, ModSelL_Pin);
+}
+
