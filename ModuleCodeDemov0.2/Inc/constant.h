@@ -9,9 +9,6 @@
 #define QSFP28_IDENTIFIER                     0X11
 #define IS_PAGED                              0x00<<2U
 
-#define GN2104_TX_I2C_ADDRESS                 0x24
-#define GN2104_RX_I2C_ADDRESS                 0x2C
-#define GN2104_ADDRESS_SIZE                   I2C_MEMADD_SIZE_16BIT
 
 #define IDENTIFIER_ADDRESS                    0
 #define STATUS                                1
