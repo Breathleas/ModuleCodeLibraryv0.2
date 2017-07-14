@@ -60,6 +60,7 @@
 #define Rx_LOL_GPIO_Port GPIOA
 #define ModSelL_Pin GPIO_PIN_0
 #define ModSelL_GPIO_Port GPIOE
+#define ModSelL_EXTI_IRQn EXTI0_IRQn
 #define LPMode_Pin GPIO_PIN_1
 #define LPMode_GPIO_Port GPIOE
 #define LPMode_EXTI_IRQn EXTI1_IRQn

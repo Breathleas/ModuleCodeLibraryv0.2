@@ -39,6 +39,19 @@ void I2C_Slave_Transreceiver_IT_Iniitialize(I2C_HandleTypeDef *hi2c)    //初始化
     __HAL_I2C_ENABLE_IT(hi2c, I2C_IT_EVT | I2C_IT_BUF | I2C_IT_ERR);
 }
 
+void I2C_Slave_Transreceiver_IT_Deiniitialize(I2C_HandleTypeDef *hi2c)
+{
+	  EmptyBuffer(TxRxBuffer);
+	
+	  __HAL_I2C_DISABLE_IT(hi2c, I2C_IT_EVT | I2C_IT_BUF | I2C_IT_ERR);
+	
+	  CLEAR_BIT(hi2c->Instance->CR1, I2C_CR1_ACK);
+	
+	  hi2c->State = HAL_I2C_STATE_READY;
+	
+    hi2c->Mode = HAL_I2C_MODE_NONE;
+}
+
 void USER_SLAVE_I2C_EV_IRQHandler(I2C_HandleTypeDef *hi2c)      //事件中断处理
 {
     uint32_t tmp1 = 0, tmp2 = 0, tmp3 = 0, tmp4 = 0;
@@ -95,14 +108,15 @@ void USER_SLAVE_I2C_EV_IRQHandler(I2C_HandleTypeDef *hi2c)      //事件中断处理
 }
 static void User_I2C_Slave_ADDR(I2C_HandleTypeDef *hi2c)        //处理 ADDR FLAG
 {
-	/*
 	if(IsModSelL() == 1)
 	{
 		__HAL_I2C_CLEAR_ADDRFLAG(hi2c);
 	  SET_BIT(hi2c->Instance->CR1, I2C_CR1_STOP);
+		EmptyBuffer(TxRxBuffer);
+	  hi2c->pBuffPtr = TxRxBuffer;
+    hi2c->XferCount = RW_CHUNK_SIZE+1;
 	  return;
   }
-	*/
 	uint32_t tmp4 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_TRA);
 	if((tmp4 == SET) && (hi2c->XferCount < hi2c->XferSize))
 	{

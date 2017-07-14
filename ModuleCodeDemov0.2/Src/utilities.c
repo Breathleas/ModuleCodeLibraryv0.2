@@ -59,4 +59,3 @@ uint8_t IsModSelL(void)                //1不接受数据，0接收数据
 {
 	return HAL_GPIO_ReadPin(ModSelL_GPIO_Port, ModSelL_Pin);
 }
-

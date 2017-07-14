@@ -188,6 +188,30 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+* @brief This function handles EXTI line0 interrupt.
+*/
+void EXTI0_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI0_IRQn 0 */
+  if(IsModSelL() == 0)
+	{
+		if(hi2c1.State == HAL_I2C_STATE_READY)
+	  {
+		  I2C_Slave_Transreceiver_IT_Iniitialize(&hi2c1);
+	  }
+	}
+	else
+	{
+		I2C_Slave_Transreceiver_IT_Deiniitialize(&hi2c1);
+	}
+  /* USER CODE END EXTI0_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+  /* USER CODE BEGIN EXTI0_IRQn 1 */
+
+  /* USER CODE END EXTI0_IRQn 1 */
+}
+
+/**
 * @brief This function handles EXTI line1 interrupt.
 */
 void EXTI1_IRQHandler(void)
@@ -225,7 +249,7 @@ void I2C1_EV_IRQHandler(void)
 
   USER_SLAVE_I2C_EV_IRQHandler(&hi2c1);
   /* USER CODE END I2C1_EV_IRQn 0 */
-  //HAL_I2C_EV_IRQHandler(&hi2c1);
+ // HAL_I2C_EV_IRQHandler(&hi2c1);
   /* USER CODE BEGIN I2C1_EV_IRQn 1 */
 
   /* USER CODE END I2C1_EV_IRQn 1 */
@@ -240,7 +264,7 @@ void I2C1_ER_IRQHandler(void)
 	
   User_HAL_I2C_ER_IRQHandler(&hi2c1);
   /* USER CODE END I2C1_ER_IRQn 0 */
-  //HAL_I2C_ER_IRQHandler(&hi2c1);
+ // HAL_I2C_ER_IRQHandler(&hi2c1);
   /* USER CODE BEGIN I2C1_ER_IRQn 1 */
 
   /* USER CODE END I2C1_ER_IRQn 1 */
