@@ -4,6 +4,7 @@
 #include "stdlib.h"
 #include "Module_Master_CDR.h"
 #include "utilities.h"
+#include "Module_Master_Driver_I2C.h"
 
 //1.0 版 只支持 SFF8636中 定义的最简功能，除去模块信息，Memory Map共有256个字节
 #define RO_START_ADDRESS_1    0
@@ -59,6 +60,42 @@ uint8_t Write_MemMap(int Memory_Address, uint8_t value)             //写MemMap
 	else
 	{
     *(MemMap_Array + Memory_Address) = value;
+		
+		if(Memory_Address == CONTROL)
+		{
+		  if((value &  0x08) != 0)
+			{
+			  TxDisable(&hi2c2,Channel_3);
+			}
+			else
+			{
+				TxEnable(&hi2c2,Channel_3);
+			}
+		  if((value &  0x04) != 0)
+			{
+			  TxDisable(&hi2c2,Channel_2);			  
+			}
+			else
+			{
+				TxEnable(&hi2c2,Channel_2);
+			}
+		  if((value &  0x02) != 0)
+			{
+			  TxDisable(&hi2c2,Channel_1);			  
+			}
+			else
+			{
+				TxEnable(&hi2c2,Channel_1);
+			}
+      if((value &  0x01) != 0)
+			{
+			  TxDisable(&hi2c2,Channel_0);			  
+		  }
+			else
+			{
+				TxEnable(&hi2c2,Channel_0);
+			}
+		}
 		//MASTERI2C->PushToChip(Memory_Address,value)
 	}
 	return WRITE_NORMAL;

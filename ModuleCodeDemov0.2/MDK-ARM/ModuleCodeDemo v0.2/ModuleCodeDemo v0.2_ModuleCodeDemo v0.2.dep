@@ -1,5 +1,5 @@
 Dependencies for Project 'ModuleCodeDemo v0.2', Target 'ModuleCodeDemo v0.2': (DO NOT MODIFY !)
-F (../Src/main.c)(0x596C1F30)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include --C99-I.\RTE\_ModuleCodeDemo_v0.2-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o "modulecodedemo v0.2\main.o" --omf_browse "modulecodedemo v0.2\main.crf" --depend "modulecodedemo v0.2\main.d")
+F (../Src/main.c)(0x596C2F69)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include --C99-I.\RTE\_ModuleCodeDemo_v0.2-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o "modulecodedemo v0.2\main.o" --omf_browse "modulecodedemo v0.2\main.crf" --depend "modulecodedemo v0.2\main.d")
 I (../Inc/main.h)(0x596C17B7)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x59377288)
 I (../Inc/stm32f1xx_hal_conf.h)(0x596C17B7)
@@ -32,6 +32,7 @@ I (../Inc/Module_Slave_I2C.h)(0x59685B4A)
 I (../Inc/Module_MemMap.h)(0x595F2916)
 I (../Inc/Module_Initialization.h)(0x596C13C9)
 I (../Inc/Module_Master_CDR.h)(0x596C2225)
+I (../Inc/utilities.h)(0x596C2D1D)
 F (../Src/stm32f1xx_hal_msp.c)(0x596C18E5)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include --C99-I.\RTE\_ModuleCodeDemo_v0.2-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o "modulecodedemo v0.2\stm32f1xx_hal_msp.o" --omf_browse "modulecodedemo v0.2\stm32f1xx_hal_msp.crf" --depend "modulecodedemo v0.2\stm32f1xx_hal_msp.d")
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x59377288)
 I (../Inc/stm32f1xx_hal_conf.h)(0x596C17B7)
@@ -123,7 +124,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h)(0x59377288)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x59377289)
 I (../Inc/utilities.h)(0x596C2D1D)
 I (../Inc/constant.h)(0x59649B19)
-F (..\Src\Module_MemMap.c)(0x596C2E2C)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include --C99-I.\RTE\_ModuleCodeDemo_v0.2-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o "modulecodedemo v0.2\module_memmap.o" --omf_browse "modulecodedemo v0.2\module_memmap.crf" --depend "modulecodedemo v0.2\module_memmap.d")
+F (..\Src\Module_MemMap.c)(0x596C331C)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include --C99-I.\RTE\_ModuleCodeDemo_v0.2-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o "modulecodedemo v0.2\module_memmap.o" --omf_browse "modulecodedemo v0.2\module_memmap.crf" --depend "modulecodedemo v0.2\module_memmap.d")
 I (../Inc/Module_MemMap.h)(0x595F2916)
 I (../Inc/main.h)(0x596C17B7)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
@@ -156,6 +157,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h)(0x59377288)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h)(0x59377288)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x59377289)
 I (../Inc/utilities.h)(0x596C2D1D)
+I (../Inc/Module_Master_Driver_I2C.h)(0x5962E722)
 F (..\Src\Module_Slave_I2C.c)(0x59685C97)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include --C99-I.\RTE\_ModuleCodeDemo_v0.2-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o "modulecodedemo v0.2\module_slave_i2c.o" --omf_browse "modulecodedemo v0.2\module_slave_i2c.crf" --depend "modulecodedemo v0.2\module_slave_i2c.d")
 I (../Inc/Module_Slave_I2C.h)(0x59685B4A)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x59377288)

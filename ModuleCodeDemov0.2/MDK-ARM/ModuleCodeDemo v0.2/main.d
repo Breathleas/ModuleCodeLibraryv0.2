@@ -32,3 +32,4 @@ modulecodedemo v0.2\main.o: ../Inc/Module_Slave_I2C.h
 modulecodedemo v0.2\main.o: ../Inc/Module_MemMap.h
 modulecodedemo v0.2\main.o: ../Inc/Module_Initialization.h
 modulecodedemo v0.2\main.o: ../Inc/Module_Master_CDR.h
+modulecodedemo v0.2\main.o: ../Inc/utilities.h

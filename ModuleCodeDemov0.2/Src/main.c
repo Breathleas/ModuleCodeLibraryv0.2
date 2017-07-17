@@ -44,7 +44,8 @@
 #include "Module_Slave_I2C.h"
 #include "Module_MemMap.h"
 #include "Module_Initialization.h"
-# include "Module_Master_CDR.h"
+#include "Module_Master_CDR.h"
+#include "utilities.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -119,6 +120,7 @@ int main(void)
   while (1)
   {
     SetLatchTxfault(&hi2c2);
+		SetLatchTempHighAlarm(&hadc1);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
