@@ -28,3 +28,6 @@ modulecodedemo v0.2\module_master_cdr.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm
 modulecodedemo v0.2\module_master_cdr.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 modulecodedemo v0.2\module_master_cdr.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 modulecodedemo v0.2\module_master_cdr.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+modulecodedemo v0.2\module_master_cdr.o: ../Inc/utilities.h
+modulecodedemo v0.2\module_master_cdr.o: ../Inc/constant.h
+modulecodedemo v0.2\module_master_cdr.o: ../Inc/Module_MemMap.h

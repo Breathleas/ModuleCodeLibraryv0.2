@@ -39,7 +39,8 @@ void Module_Init(void)
 	// 58-65 保留位
 	// 66-81 随意
 	// 82-85 保留位
-	
+	Internal_Write_MemMap(86,0x00);
+	Internal_Write_MemMap(101,0x00);
 	
 	Deassert_IntL();
 }
