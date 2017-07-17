@@ -64,10 +64,10 @@ uint8_t IsModSelL(void)                //1不接受数据，0接收数据
 
 void SetLatchTempHighAlarm(ADC_HandleTypeDef *hadc)
 {
-	if(GetTemperature(hadc) > TEMP_ALARM_VALUE )
+	/*if(GetTemperature(hadc) > TEMP_ALARM_VALUE )
 	{
 	   latch_temp_high_alarm = 0x80;
-	}
+	}*/
 	return;
 }
 

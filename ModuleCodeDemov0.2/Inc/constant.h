@@ -2,8 +2,8 @@
 #define CONSTANT
 
 #define PAGE_SIZE                             128
-#define PAGE_NUMBER                           5
-#define MEMORY_MAP_SIZE                       PAGE_SIZE*2
+#define PAGE_NUMBER                           2
+#define MEMORY_MAP_SIZE                       PAGE_SIZE*PAGE_NUMBER
 #define RW_CHUNK_SIZE                         PAGE_SIZE
 
 #define QSFP28_IDENTIFIER                     0X11

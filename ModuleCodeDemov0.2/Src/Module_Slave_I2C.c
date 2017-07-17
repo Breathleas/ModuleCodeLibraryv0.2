@@ -108,15 +108,6 @@ void USER_SLAVE_I2C_EV_IRQHandler(I2C_HandleTypeDef *hi2c)      //事件中断处理
 }
 static void User_I2C_Slave_ADDR(I2C_HandleTypeDef *hi2c)        //处理 ADDR FLAG
 {
-	if(IsModSelL() == 1)
-	{
-		__HAL_I2C_CLEAR_ADDRFLAG(hi2c);
-	  SET_BIT(hi2c->Instance->CR1, I2C_CR1_STOP);
-		EmptyBuffer(TxRxBuffer);
-	  hi2c->pBuffPtr = TxRxBuffer;
-    hi2c->XferCount = RW_CHUNK_SIZE+1;
-	  return;
-  }
 	uint32_t tmp4 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_TRA);
 	if((tmp4 == SET) && (hi2c->XferCount < hi2c->XferSize))
 	{
@@ -151,7 +142,7 @@ static void User_I2C_Slave_STOPF(I2C_HandleTypeDef *hi2c)                //处理S
   // CLEAR_BIT(hi2c->Instance->CR1, I2C_CR1_ACK);
   // hi2c->State = HAL_I2C_STATE_READY;
    int m = 0;
-   int n = PAGE_SIZE + 1 - hi2c->XferCount;
+   int n = RW_CHUNK_SIZE + 1 - hi2c->XferCount;
 	 if(n >0)
 	 {
      Buffer_Internal_Address = TxRxBuffer[0];

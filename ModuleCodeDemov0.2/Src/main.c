@@ -119,8 +119,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    SetLatchTxfault(&hi2c2);
-		SetLatchTempHighAlarm(&hadc1);
+    //SetLatchTxfault(&hi2c2);
+		//SetLatchTempHighAlarm(&hadc1);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
