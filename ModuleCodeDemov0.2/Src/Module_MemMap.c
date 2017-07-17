@@ -61,7 +61,7 @@ uint8_t Write_MemMap(int Memory_Address, uint8_t value)             //дMemMap
 	{
     *(MemMap_Array + Memory_Address) = value;
 		
-		if(Memory_Address == CONTROL)
+		/*if(Memory_Address == CONTROL)
 		{
 		  if((value &  0x08) != 0)
 			{
@@ -95,7 +95,7 @@ uint8_t Write_MemMap(int Memory_Address, uint8_t value)             //дMemMap
 			{
 				TxEnable(&hi2c2,Channel_0);
 			}
-		}
+		}*/
 		//MASTERI2C->PushToChip(Memory_Address,value)
 	}
 	return WRITE_NORMAL;

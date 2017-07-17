@@ -4,7 +4,7 @@
 #define PAGE_SIZE                             128
 #define PAGE_NUMBER                           2
 #define MEMORY_MAP_SIZE                       PAGE_SIZE*PAGE_NUMBER
-#define RW_CHUNK_SIZE                         PAGE_SIZE
+#define RW_CHUNK_SIZE                         PAGE_SIZE * 2
 
 #define QSFP28_IDENTIFIER                     0X11
 #define IS_PAGED                              0x00<<2U
