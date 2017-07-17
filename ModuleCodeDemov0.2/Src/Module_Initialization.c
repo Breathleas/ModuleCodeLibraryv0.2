@@ -8,7 +8,7 @@ void Module_Init(void)
 {
 	extern ADC_HandleTypeDef hadc1;
 	
-	Assert_IntL();
+	Data_Not_Ready();
 	
 	Internal_Write_MemMap(0,0x11);     //identifier   QSFP28
 	Internal_Write_MemMap(1,0x00);     //Revision not specified
@@ -42,6 +42,7 @@ void Module_Init(void)
 	Internal_Write_MemMap(86,0x00);
 	Internal_Write_MemMap(101,0x00);
 	
-	Deassert_IntL();
+	Data_Ready();
+	Assert_IntL();
 }
 

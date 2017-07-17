@@ -16,4 +16,7 @@ uint8_t IsModSelL(void);
 void    SetLatchTempHighAlarm(ADC_HandleTypeDef *hadc);
 uint8_t GetLatchTempHighAlarm(void);
 void    ClearLatchTempHighAlarm(void);
+void Data_Ready(void);
+void Data_Not_Ready(void);
+void GetIntL(void);
 #endif

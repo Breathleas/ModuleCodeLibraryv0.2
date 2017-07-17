@@ -29,3 +29,4 @@ modulecodedemo v0.2\utilities.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_h
 modulecodedemo v0.2\utilities.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 modulecodedemo v0.2\utilities.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 modulecodedemo v0.2\utilities.o: ../Inc/constant.h
+modulecodedemo v0.2\utilities.o: ../Inc/Module_MemMap.h

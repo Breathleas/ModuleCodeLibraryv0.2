@@ -32,7 +32,14 @@ uint8_t Read_MemMap(int Memory_Address)                            //¶ÁMemMap
 		return READ_ERR;
 	}
 	
-	if (Memory_Address == (INTERRUPT_FLAG + 1))
+	if(Memory_Address == STATUS+1)
+	{
+		if((*(MemMap_Array + Memory_Address) & 0x01) == 0)
+		{
+			Deassert_IntL();
+		}
+	}
+	else if (Memory_Address == (INTERRUPT_FLAG + 1))
 	{
 		*(MemMap_Array + Memory_Address) = GetLatchTxFault(&hi2c2);
 		 ClearLatchTxfault();

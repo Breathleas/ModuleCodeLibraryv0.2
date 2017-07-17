@@ -3,6 +3,7 @@
 #include "stdint.h"
 #include "stm32f1xx_hal.h"
 #include "main.h"
+#include "Module_MemMap.h"
 
 #define Vadc          3.3
 #define V25           1774.0
@@ -50,11 +51,17 @@ uint8_t GetTx_Pin_DIS(I2C_HandleTypeDef *hi2c)
 void Assert_IntL(void)
 {
 	HAL_GPIO_WritePin(IntL_GPIO_Port, IntL_Pin, GPIO_PIN_RESET);
+	uint8_t u = Internal_Read_MemMap(2);
+	u = u & 0xFD;
+	Internal_Write_MemMap(2,u);
 }
 
 void Deassert_IntL(void)
 {
 	HAL_GPIO_WritePin(IntL_GPIO_Port, IntL_Pin, GPIO_PIN_SET);
+	uint8_t u = Internal_Read_MemMap(2);
+	u = u | 0x02;
+	Internal_Write_MemMap(2,u);
 }
 
 uint8_t IsModSelL(void)                //1不接受数据，0接收数据
@@ -79,4 +86,23 @@ uint8_t GetLatchTempHighAlarm(void)
 void    ClearLatchTempHighAlarm(void)
 {
 	latch_temp_high_alarm = 0;
+}
+
+void Data_Ready(void)
+{
+	uint8_t u = Internal_Read_MemMap(2);
+	u = u & 0xFE;
+	Internal_Write_MemMap(2,u);
+}
+
+void Data_Not_Ready(void)
+{
+	uint8_t u = Internal_Read_MemMap(2);
+	u = u | 0x01;
+	Internal_Write_MemMap(2,u);
+}
+
+void GetIntL(void)
+{
+	HAL_GPIO_ReadPin(IntL_GPIO_Port, IntL_Pin);
 }
