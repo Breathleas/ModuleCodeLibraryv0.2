@@ -31,3 +31,4 @@ modulecodedemo v0.2\module_memmap.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1
 modulecodedemo v0.2\module_memmap.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 modulecodedemo v0.2\module_memmap.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 modulecodedemo v0.2\module_memmap.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+modulecodedemo v0.2\module_memmap.o: ../Inc/utilities.h

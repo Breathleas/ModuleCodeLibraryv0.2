@@ -8,6 +8,8 @@
 #define V25           1774.0
 #define AVG_SLOPE     0.0043
 
+static uint8_t latch_temp_high_alarm = 0;
+
 void EmptyBuffer(uint8_t* a)
 {
 	int i = 0;
@@ -58,4 +60,23 @@ void Deassert_IntL(void)
 uint8_t IsModSelL(void)                //1不接受数据，0接收数据
 {
 	return HAL_GPIO_ReadPin(ModSelL_GPIO_Port, ModSelL_Pin);
+}
+
+void SetLatchTempHighAlarm(ADC_HandleTypeDef *hadc)
+{
+	if(GetTemperature(hadc) > TEMP_ALARM_VALUE )
+	{
+	   latch_temp_high_alarm = 0x80;
+	}
+	return;
+}
+
+uint8_t GetLatchTempHighAlarm(void)
+{
+  return latch_temp_high_alarm;
+}
+
+void    ClearLatchTempHighAlarm(void)
+{
+	latch_temp_high_alarm = 0;
 }
