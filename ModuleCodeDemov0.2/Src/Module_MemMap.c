@@ -2,6 +2,7 @@
 #include "main.h"
 #include "constant.h"
 #include "stdlib.h"
+# include "Module_Master_CDR.h"
 
 //1.0 版 只支持 SFF8636中 定义的最简功能，除去模块信息，Memory Map共有256个字节
 #define RO_START_ADDRESS_1    0
@@ -14,6 +15,7 @@
 
 
 static uint8_t MemMap_Array[MEMORY_MAP_SIZE] = {0};                  //内部内存地址
+extern I2C_HandleTypeDef hi2c2;
 //static int Address_Redirection(int Memory_Address);                实现多页的MemMap（未完成）
 
 uint8_t* Get_Memmap(void)                                                //获取MemMap地址
@@ -26,6 +28,11 @@ uint8_t Read_MemMap(int Memory_Address)                            //读MemMap
 	if( Memory_Address >= MEMORY_MAP_SIZE)
 	{
 		return READ_ERR;
+	}
+	if (Memory_Address == (INTERRUPT_FLAG + 1))
+	{
+		*(MemMap_Array + Memory_Address) = GetLatchTxFault(&hi2c2);
+		 ClearLatchTxfault();
 	}
 	//*(MemMap_Array + Memory_Address) = MASTERI2C->GetFromChip(Memory_Address)
   return *(MemMap_Array + Memory_Address);

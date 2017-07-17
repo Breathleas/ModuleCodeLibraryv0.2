@@ -24,7 +24,11 @@
 #define GN2104_RX_I2C_ADDRESS                 0x2C
 #define GN2104_ADDRESS_SIZE                   I2C_MEMADD_SIZE_16BIT
 
-uint8_t GetTxFault(I2C_HandleTypeDef *hi2c);
+void SetLatchTxfault(I2C_HandleTypeDef *hi2c);
+
+uint8_t GetLatchTxFault(I2C_HandleTypeDef *hi2c);
+
+void ClearLatchTxfault(void);
 
 void CDRPowerUp(I2C_HandleTypeDef *hi2c, uint8_t channel);
 

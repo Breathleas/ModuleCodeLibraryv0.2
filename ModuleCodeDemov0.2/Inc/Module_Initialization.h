@@ -3,7 +3,7 @@
 
 #include "stm32f1xx_hal.h"
 
-void Module_Init(ADC_HandleTypeDef *hadc);
+void Module_Init(void);
 
 
 #endif

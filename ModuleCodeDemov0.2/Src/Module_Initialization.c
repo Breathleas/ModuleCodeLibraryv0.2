@@ -4,7 +4,7 @@
 #include "utilities.h"
 #include "constant.h"
 
-void Module_Init(ADC_HandleTypeDef *hadc)
+void Module_Init(void)
 {
 	extern ADC_HandleTypeDef hadc1;
 	
@@ -26,7 +26,7 @@ void Module_Init(ADC_HandleTypeDef *hadc)
 	// 15-18 保留位
 	// 19-21 随意
 	//在utilities中需要这些函数
-	uint16_t temperature = GetTemperature(hadc);
+	uint16_t temperature = GetTemperature(&hadc1);
 	Internal_Write_MemMap(22,((uint8_t)(temperature/256)));
 	Internal_Write_MemMap(23,((uint8_t)(temperature & CLEAR_HIGHER_BIT)));
   //GetTemperature() -> 22,23

@@ -48,8 +48,6 @@
 
 #define IntL_Pin GPIO_PIN_2
 #define IntL_GPIO_Port GPIOE
-#define IBIAS_MON_Pin GPIO_PIN_0
-#define IBIAS_MON_GPIO_Port GPIOA
 #define Tx_LOS_LOL_Pin GPIO_PIN_3
 #define Tx_LOS_LOL_GPIO_Port GPIOA
 #define Tx_DSBL_Pin GPIO_PIN_4

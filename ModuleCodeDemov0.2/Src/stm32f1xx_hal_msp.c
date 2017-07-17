@@ -39,6 +39,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
 
+extern DMA_HandleTypeDef hdma_adc1;
+
 extern void _Error_Handler(char *, int);
 /* USER CODE BEGIN 0 */
 
@@ -74,7 +76,7 @@ void HAL_MspInit(void)
 
     /**DISABLE: JTAG-DP Disabled and SW-DP Disabled 
     */
-  __HAL_AFIO_REMAP_SWJ_DISABLE();
+  //__HAL_AFIO_REMAP_SWJ_DISABLE();
 
   /* USER CODE BEGIN MspInit 1 */
 
@@ -84,7 +86,6 @@ void HAL_MspInit(void)
 void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 {
 
-  GPIO_InitTypeDef GPIO_InitStruct;
   if(hadc->Instance==ADC1)
   {
   /* USER CODE BEGIN ADC1_MspInit 0 */
@@ -92,34 +93,30 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
   /* USER CODE END ADC1_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_ADC1_CLK_ENABLE();
+  
+    /* ADC1 DMA Init */
+    /* ADC1 Init */
+    hdma_adc1.Instance = DMA1_Channel1;
+    hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_adc1.Init.MemInc = DMA_MINC_DISABLE;
+    hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    hdma_adc1.Init.Mode = DMA_CIRCULAR;
+    hdma_adc1.Init.Priority = DMA_PRIORITY_LOW;
+    if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
+    {
+      _Error_Handler(__FILE__, __LINE__);
+    }
+
+    __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc1);
+
     /* ADC1 interrupt Init */
     HAL_NVIC_SetPriority(ADC1_2_IRQn, 3, 0);
     HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
   /* USER CODE BEGIN ADC1_MspInit 1 */
 
   /* USER CODE END ADC1_MspInit 1 */
-  }
-  else if(hadc->Instance==ADC2)
-  {
-  /* USER CODE BEGIN ADC2_MspInit 0 */
-
-  /* USER CODE END ADC2_MspInit 0 */
-    /* Peripheral clock enable */
-    __HAL_RCC_ADC2_CLK_ENABLE();
-  
-    /**ADC2 GPIO Configuration    
-    PA0-WKUP     ------> ADC2_IN0 
-    */
-    GPIO_InitStruct.Pin = IBIAS_MON_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    HAL_GPIO_Init(IBIAS_MON_GPIO_Port, &GPIO_InitStruct);
-
-    /* ADC2 interrupt Init */
-    HAL_NVIC_SetPriority(ADC1_2_IRQn, 3, 0);
-    HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
-  /* USER CODE BEGIN ADC2_MspInit 1 */
-
-  /* USER CODE END ADC2_MspInit 1 */
   }
 
 }
@@ -135,44 +132,14 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
     /* Peripheral clock disable */
     __HAL_RCC_ADC1_CLK_DISABLE();
 
-    /* ADC1 interrupt DeInit */
-  /* USER CODE BEGIN ADC1:ADC1_2_IRQn disable */
-    /**
-    * Uncomment the line below to disable the "ADC1_2_IRQn" interrupt
-    * Be aware, disabling shared interrupt may affect other IPs
-    */
-    /* HAL_NVIC_DisableIRQ(ADC1_2_IRQn); */
-  /* USER CODE END ADC1:ADC1_2_IRQn disable */
+    /* ADC1 DMA DeInit */
+    HAL_DMA_DeInit(hadc->DMA_Handle);
 
+    /* ADC1 interrupt DeInit */
+    HAL_NVIC_DisableIRQ(ADC1_2_IRQn);
   /* USER CODE BEGIN ADC1_MspDeInit 1 */
 
   /* USER CODE END ADC1_MspDeInit 1 */
-  }
-  else if(hadc->Instance==ADC2)
-  {
-  /* USER CODE BEGIN ADC2_MspDeInit 0 */
-
-  /* USER CODE END ADC2_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __HAL_RCC_ADC2_CLK_DISABLE();
-  
-    /**ADC2 GPIO Configuration    
-    PA0-WKUP     ------> ADC2_IN0 
-    */
-    HAL_GPIO_DeInit(IBIAS_MON_GPIO_Port, IBIAS_MON_Pin);
-
-    /* ADC2 interrupt DeInit */
-  /* USER CODE BEGIN ADC2:ADC1_2_IRQn disable */
-    /**
-    * Uncomment the line below to disable the "ADC1_2_IRQn" interrupt
-    * Be aware, disabling shared interrupt may affect other IPs
-    */
-    /* HAL_NVIC_DisableIRQ(ADC1_2_IRQn); */
-  /* USER CODE END ADC2:ADC1_2_IRQn disable */
-
-  /* USER CODE BEGIN ADC2_MspDeInit 1 */
-
-  /* USER CODE END ADC2_MspDeInit 1 */
   }
 
 }
@@ -198,7 +165,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* Peripheral clock enable */
-   // __HAL_RCC_I2C1_CLK_ENABLE();
+    //__HAL_RCC_I2C1_CLK_ENABLE();
     /* I2C1 interrupt Init */
     HAL_NVIC_SetPriority(I2C1_EV_IRQn, 2, 0);
     HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
@@ -225,7 +192,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* hi2c)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* Peripheral clock enable */
-  //  __HAL_RCC_I2C2_CLK_ENABLE();
+   //__HAL_RCC_I2C2_CLK_ENABLE();
   /* USER CODE BEGIN I2C2_MspInit 1 */
 
   /* USER CODE END I2C2_MspInit 1 */
