@@ -400,11 +400,6 @@
               <FilePath>..\Src\Module_Initialization.c</FilePath>
             </File>
             <File>
-              <FileName>Module_MemMap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\Module_MemMap.c</FilePath>
-            </File>
-            <File>
               <FileName>Module_Slave_I2C.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\Module_Slave_I2C.c</FilePath>
@@ -448,6 +443,11 @@
               <FileName>stm32f1xx_hal_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>Module_MemMap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\Module_MemMap.c</FilePath>
             </File>
             <File>
               <FileName>stm32f1xx_hal_pwr.c</FileName>

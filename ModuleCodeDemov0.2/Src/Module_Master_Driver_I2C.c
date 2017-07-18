@@ -1,11 +1,15 @@
+
+//这个头文件存放了与 Tx Driver 芯片通信的函数的具体实现
+
 #include "Module_Master_Driver_I2C.h"
 #include "utilities.h"
 
+//一些内部变量
+static uint8_t Bits_On = 0x01;                   //位为1
+static uint8_t Bits_Off = 0x00;                  //位为0
+static uint8_t Buffer = 0x00;                    //缓冲位
 
-static uint8_t Bits_On = 0x01;
-static uint8_t Bits_Off = 0x00;
-static uint8_t Buffer = 0x00;
-void SetTxModulationCurrent(double modulationCurrent, I2C_HandleTypeDef *hi2c, uint8_t channel)
+void SetTxModulationCurrent(double modulationCurrent, I2C_HandleTypeDef *hi2c, uint8_t channel)      //设置调制电流
 {
 	uint16_t current = (uint16_t)(1023.0*(modulationCurrent/MAX_IMOD_CUR));
 	uint8_t currentUp = (current/256) & (0x03);
@@ -47,7 +51,7 @@ void SetTxModulationCurrent(double modulationCurrent, I2C_HandleTypeDef *hi2c, u
 	return;
 }
 
-void SetTxBiasSinkCurrent(double biasSinkCurrent, I2C_HandleTypeDef *hi2c, uint8_t channel)
+void SetTxBiasSinkCurrent(double biasSinkCurrent, I2C_HandleTypeDef *hi2c, uint8_t channel)          //设置偏置电流
 {
 	uint16_t current = (uint16_t)(1023.0*(biasSinkCurrent/MAX_IBIAS_CUR));
 	uint8_t currentUp = (current/256) & (0x03);
@@ -89,7 +93,7 @@ void SetTxBiasSinkCurrent(double biasSinkCurrent, I2C_HandleTypeDef *hi2c, uint8
 	return;
 }
 
-void TxEnable(I2C_HandleTypeDef *hi2c, uint8_t channel)	//失能Tx_Dis
+void TxEnable(I2C_HandleTypeDef *hi2c, uint8_t channel)	                                           //失能Tx_Dis
 {
 	  Tx_Pin_Enable();
 		if(channel == Channel_0)
@@ -118,9 +122,8 @@ void TxEnable(I2C_HandleTypeDef *hi2c, uint8_t channel)	//失能Tx_Dis
 	return;
 }
 
-void TxDisable(I2C_HandleTypeDef *hi2c, uint8_t channel)	//使能Tx_Dis 如果输入是 Channel_All
+void TxDisable(I2C_HandleTypeDef *hi2c, uint8_t channel)	                                        //使能Tx_Dis
 {
-	  Tx_Pin_Disable();
 		if(channel == Channel_0)
 		{
       HAL_I2C_Mem_Write(hi2c, GN1185_ADDRESS, 0x09, I2C_MEMADD_SIZE_8BIT, &Bits_On, 1, 20);
@@ -139,6 +142,7 @@ void TxDisable(I2C_HandleTypeDef *hi2c, uint8_t channel)	//使能Tx_Dis 如果输入是
 		}
 		else if(channel == Channel_All)
 		{
+			Tx_Pin_Disable();
       HAL_I2C_Mem_Write(hi2c, GN1185_ADDRESS, 0x09, I2C_MEMADD_SIZE_8BIT, &Bits_On, 1, 20);
 			HAL_I2C_Mem_Write(hi2c, GN1185_ADDRESS, 0x19, I2C_MEMADD_SIZE_8BIT, &Bits_On, 1, 20);
 			HAL_I2C_Mem_Write(hi2c, GN1185_ADDRESS, 0x29, I2C_MEMADD_SIZE_8BIT, &Bits_On, 1, 20);
@@ -147,7 +151,7 @@ void TxDisable(I2C_HandleTypeDef *hi2c, uint8_t channel)	//使能Tx_Dis 如果输入是
 	return;
 }
 
-uint8_t GetTxStatus(I2C_HandleTypeDef *hi2c, uint8_t channel)
+uint8_t GetTxStatus(I2C_HandleTypeDef *hi2c, uint8_t channel)                                     //获取Tx状态
 {
 	  HAL_I2C_Mem_Read(hi2c, GN1185_ADDRESS, 0x0C, I2C_MEMADD_SIZE_8BIT, &Buffer, 1, 20);
 	  if(channel == Channel_0)
@@ -170,7 +174,7 @@ uint8_t GetTxStatus(I2C_HandleTypeDef *hi2c, uint8_t channel)
 }
 
 
-void SetCurrentMonitor(I2C_HandleTypeDef *hi2c,uint8_t currentType, uint8_t channel)
+void SetCurrentMonitor(I2C_HandleTypeDef *hi2c,uint8_t currentType, uint8_t channel)               //设置电流监视器
 {
 	if(currentType == I_Mod)
 	{
@@ -226,7 +230,7 @@ void SetCurrentMonitor(I2C_HandleTypeDef *hi2c,uint8_t currentType, uint8_t chan
 	return;
 }
 
-void SetLDD_EYE_OPT(uint8_t value, I2C_HandleTypeDef *hi2c, uint8_t channel)
+void SetLDD_EYE_OPT(uint8_t value, I2C_HandleTypeDef *hi2c, uint8_t channel)                          //设置眼图优化
 {
 		if(channel == Channel_0)
 		{
@@ -254,7 +258,7 @@ void SetLDD_EYE_OPT(uint8_t value, I2C_HandleTypeDef *hi2c, uint8_t channel)
 	return;
 }
 
-void SetEqulizationMag(uint8_t value, I2C_HandleTypeDef *hi2c, uint8_t channel)
+void SetEqulizationMag(uint8_t value, I2C_HandleTypeDef *hi2c, uint8_t channel)                       //设置平衡大小
 {
 		if(channel == Channel_0)
 		{
@@ -298,7 +302,7 @@ void SetEqulizationMag(uint8_t value, I2C_HandleTypeDef *hi2c, uint8_t channel)
 	return;
 }
 	
-void SetEqulizationPhase(uint8_t phase, I2C_HandleTypeDef *hi2c, uint8_t channel)
+void SetEqulizationPhase(uint8_t phase, I2C_HandleTypeDef *hi2c, uint8_t channel)                     //设置平衡角度
 {
 		if(channel == Channel_0)
 		{
@@ -342,7 +346,7 @@ void SetEqulizationPhase(uint8_t phase, I2C_HandleTypeDef *hi2c, uint8_t channel
 	return;
 }
 	
-void EnableEqulizer(I2C_HandleTypeDef *hi2c, uint8_t channel)
+void EnableEqulizer(I2C_HandleTypeDef *hi2c, uint8_t channel)                                        //使能平衡
 {
 		if(channel == Channel_0)
 		{
@@ -386,7 +390,7 @@ void EnableEqulizer(I2C_HandleTypeDef *hi2c, uint8_t channel)
 	return;
 }
 	
-void DisableEqulizer(I2C_HandleTypeDef *hi2c, uint8_t channel)
+void DisableEqulizer(I2C_HandleTypeDef *hi2c, uint8_t channel)                                      //失能平衡
 {
 		if(channel == Channel_0)
 		{
@@ -430,7 +434,7 @@ void DisableEqulizer(I2C_HandleTypeDef *hi2c, uint8_t channel)
 	return;
 }
 
-void SetCrossingPointAdj(uint8_t value, I2C_HandleTypeDef *hi2c, uint8_t channel)  //35-65
+void SetCrossingPointAdj(uint8_t value, I2C_HandleTypeDef *hi2c, uint8_t channel)                   //设置交叉点
 {
 		if(channel == Channel_0)
 		{
@@ -474,7 +478,7 @@ void SetCrossingPointAdj(uint8_t value, I2C_HandleTypeDef *hi2c, uint8_t channel
 	return;
 }
 	
-void EnableCrossingPointAdj(I2C_HandleTypeDef *hi2c, uint8_t channel)
+void EnableCrossingPointAdj(I2C_HandleTypeDef *hi2c, uint8_t channel)                             //使能交叉点
 {
 		if(channel == Channel_0)
 		{
@@ -518,7 +522,7 @@ void EnableCrossingPointAdj(I2C_HandleTypeDef *hi2c, uint8_t channel)
 	return;
 }
 	
-void DisableCrossingPointAdj(I2C_HandleTypeDef *hi2c, uint8_t channel)
+void DisableCrossingPointAdj(I2C_HandleTypeDef *hi2c, uint8_t channel)                                //失能交叉点
 {
 		if(channel == Channel_0)
 		{

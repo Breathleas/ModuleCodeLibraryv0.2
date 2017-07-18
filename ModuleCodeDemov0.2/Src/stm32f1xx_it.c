@@ -193,16 +193,17 @@ void SysTick_Handler(void)
 void EXTI0_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI0_IRQn 0 */
+	//处理ModSelL中断
   if(IsModSelL() == 0)
 	{
 		if(hi2c1.State == HAL_I2C_STATE_READY)
 	  {
-		  I2C_Slave_Transreceiver_IT_Iniitialize(&hi2c1);
+		  I2C_Slave_Transreceiver_IT_Initialize(&hi2c1);
 	  }
 	}
 	else
 	{
-		I2C_Slave_Transreceiver_IT_Deiniitialize(&hi2c1);
+		I2C_Slave_Transreceiver_IT_Deinitialize(&hi2c1);
 	}
   /* USER CODE END EXTI0_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
@@ -217,7 +218,21 @@ void EXTI0_IRQHandler(void)
 void EXTI1_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI1_IRQn 0 */
-
+	//处理LPMode中断
+  if(IsLPMode() == 0)                                      //如果为0
+	{
+		if(IsLPMode_Overriade() == 0)                          //如果未覆盖
+		{
+		  NormalPowerMode();                                   //正常功率
+		}
+	}
+	else                                                     //如果为1
+	{
+		if(IsLPMode_Overriade() == 0)                          //如果已覆盖
+		{
+		  LowPowerMode();                                      //低功率
+		}
+	}
   /* USER CODE END EXTI1_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
   /* USER CODE BEGIN EXTI1_IRQn 1 */
@@ -259,8 +274,8 @@ void ADC1_2_IRQHandler(void)
 void I2C1_EV_IRQHandler(void)
 {
   /* USER CODE BEGIN I2C1_EV_IRQn 0 */
-
-  USER_SLAVE_I2C_EV_IRQHandler(&hi2c1);
+  //处理事件中断
+  User_Slave_I2C_EV_IRQHandler(&hi2c1);
   /* USER CODE END I2C1_EV_IRQn 0 */
   //HAL_I2C_EV_IRQHandler(&hi2c1);
   /* USER CODE BEGIN I2C1_EV_IRQn 1 */
@@ -274,8 +289,8 @@ void I2C1_EV_IRQHandler(void)
 void I2C1_ER_IRQHandler(void)
 {
   /* USER CODE BEGIN I2C1_ER_IRQn 0 */
-	
-  User_HAL_I2C_ER_IRQHandler(&hi2c1);
+	//处理错误中断
+  User_Slave_I2C_ER_IRQHandler(&hi2c1);
   /* USER CODE END I2C1_ER_IRQn 0 */
   //HAL_I2C_ER_IRQHandler(&hi2c1);
   /* USER CODE BEGIN I2C1_ER_IRQn 1 */

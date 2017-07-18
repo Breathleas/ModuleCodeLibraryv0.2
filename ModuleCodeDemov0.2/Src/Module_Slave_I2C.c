@@ -1,36 +1,42 @@
 
+//Õâ¸öcÎÄ¼ş´æ·ÅÁË¹ØÓÚÓëÉÏÎ»»ú¹µÍ¨µÄI2CµÄ³õÊ¼»¯ÖĞ¶Ï£¬¹Ø±ÕÖĞ¶ÏºÍÖĞ¶Ïº¯ÊıµÄ¾ßÌåÊµÏÖºÍÒ»Ğ©ÄÚ²¿º¯ÊıÒÔ¼°ÄÚ²¿Êı¾İ½á¹¹¡£
+
 #include "Module_Slave_I2C.h"
 #include "main.h"
 #include "constant.h"
 #include "Module_MemMap.h"
 #include "utilities.h"
 
-static void User_I2C_Slave_ADDR(I2C_HandleTypeDef *hi2c);
-static void User_I2C_Slave_STOPF(I2C_HandleTypeDef *hi2c);
-static void User_I2C_SlaveTransmit_TXE(I2C_HandleTypeDef *hi2c);
-static void User_I2C_SlaveTransmit_BTF(I2C_HandleTypeDef *hi2c);
-static void User_I2C_SlaveReceive_RXNE(I2C_HandleTypeDef *hi2c);
-static void User_I2C_SlaveReceive_BTF(I2C_HandleTypeDef *hi2c);
-static void User_I2C_Slave_AF(I2C_HandleTypeDef *hi2c);
-
-static uint8_t TxRxBuffer[RW_CHUNK_SIZE+1] = {0};                      //Êı¾İ·¢ËÍ½ÓÊÕ»º³åÇø
-static uint8_t Buffer_Internal_Address = 0;                            //»º³åÇøÖ¸Õë                                                   
+#define TXRXBUFFER_SIZE     RW_CHUNK_SIZE+1                            //»º³åÇø´óĞ¡
 
 
-void I2C_Slave_Transreceiver_IT_Iniitialize(I2C_HandleTypeDef *hi2c)    //³õÊ¼»¯I2C½ÓÊÕ
+//ÄÚ²¿Êı¾İ½á¹¹
+static uint8_t TxRxBuffer[TXRXBUFFER_SIZE] = {0};                      //Êı¾İ·¢ËÍ½ÓÊÕ»º³åÇø
+static uint8_t Buffer_Internal_Address = 0;                            //»º³åÇøµØÖ·Ö¸Õë 
+
+//ÄÚ²¿º¯Êı
+static void User_I2C_Slave_ADDR(I2C_HandleTypeDef *hi2c);              //½ÓÊÕµ½µØÖ·ÖĞ¶Ï
+static void User_I2C_Slave_STOPF(I2C_HandleTypeDef *hi2c);             //½ÓÊÜµ½Í£Ö¹ÖĞ¶Ï
+static void User_I2C_SlaveTransmit_TXE(I2C_HandleTypeDef *hi2c);       //½ÓÊÕÊı¾İÖĞ¶Ï
+static void User_I2C_SlaveTransmit_BTF(I2C_HandleTypeDef *hi2c);       //½ÓÊÕÊı¾İÖĞ¶Ï
+static void User_I2C_SlaveReceive_RXNE(I2C_HandleTypeDef *hi2c);       //·¢ËÍÊı¾İÖĞ¶Ï
+static void User_I2C_SlaveReceive_BTF(I2C_HandleTypeDef *hi2c);        //·¢ËÍÊı¾İÖĞ¶Ï
+static void User_I2C_Slave_AF(I2C_HandleTypeDef *hi2c);                //Î´ÏìÓ¦ÖĞ¶Ï
+
+void I2C_Slave_Transreceiver_IT_Initialize(I2C_HandleTypeDef *hi2c)    //³õÊ¼»¯ÖĞ¶Ï
 {
     //Ê§ÄÜ POS
     CLEAR_BIT(hi2c->Instance->CR1, I2C_CR1_POS);
     
-	  //½«×´Ì¬¶ÁÈëI2C½á¹¹
+	  //½«´Ô»ú£¬·±Ã¦×´Ì¬¶ÁÈëI2C½á¹¹
     hi2c->State = HAL_I2C_STATE_BUSY;
     hi2c->Mode = HAL_I2C_MODE_SLAVE;
     hi2c->ErrorCode = HAL_I2C_ERROR_NONE;
     
 	  //½«»º³åÇøºÍ»º³å´óĞ¡¶ÁÈëI2C½á¹¹
     hi2c->pBuffPtr = TxRxBuffer;
-    hi2c->XferSize = RW_CHUNK_SIZE+1;
-    hi2c->XferCount = RW_CHUNK_SIZE+1;
+    hi2c->XferSize = TXRXBUFFER_SIZE;
+    hi2c->XferCount = TXRXBUFFER_SIZE;
 
     //Ê¹ÄÜÏìÓ¦
     SET_BIT(hi2c->Instance->CR1, I2C_CR1_ACK);
@@ -39,36 +45,44 @@ void I2C_Slave_Transreceiver_IT_Iniitialize(I2C_HandleTypeDef *hi2c)    //³õÊ¼»¯
     __HAL_I2C_ENABLE_IT(hi2c, I2C_IT_EVT | I2C_IT_BUF | I2C_IT_ERR);
 }
 
-void I2C_Slave_Transreceiver_IT_Deiniitialize(I2C_HandleTypeDef *hi2c)
+void I2C_Slave_Transreceiver_IT_Deinitialize(I2C_HandleTypeDef *hi2c)   //¹Ø±ÕÖĞ¶Ï
 {
+	 //Çå¿Õ»º´æÇø
 	  EmptyBuffer(TxRxBuffer);
-	
+	 
+	  //Ê§ÄÜÖĞ¶Ï
 	  __HAL_I2C_DISABLE_IT(hi2c, I2C_IT_EVT | I2C_IT_BUF | I2C_IT_ERR);
-	
+	  
+	  //Ê§ÄÜÏàÓ¦
 	  CLEAR_BIT(hi2c->Instance->CR1, I2C_CR1_ACK);
 	
+	  //×´Ì¬Îª´ıÃü
 	  hi2c->State = HAL_I2C_STATE_READY;
-	
+	  
+	  //Ä£Ê½ÎªÃ»ÓĞ
     hi2c->Mode = HAL_I2C_MODE_NONE;
 }
 
-void USER_SLAVE_I2C_EV_IRQHandler(I2C_HandleTypeDef *hi2c)      //ÊÂ¼şÖĞ¶Ï´¦Àí
+void User_Slave_I2C_EV_IRQHandler(I2C_HandleTypeDef *hi2c)      //ÊÂ¼şÖĞ¶Ï´¦Àí
 {
     uint32_t tmp1 = 0, tmp2 = 0, tmp3 = 0, tmp4 = 0;
     tmp1 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_ADDR);
     tmp2 = __HAL_I2C_GET_IT_SOURCE(hi2c, (I2C_IT_EVT));
     tmp3 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_STOPF);
     tmp4 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_TRA);
+	
     /* ADDR ´¥·¢ --------------------------------------------------------------*/
     if((tmp1 == SET) && (tmp2 == SET))
     {
       User_I2C_Slave_ADDR(hi2c);
     }
+		
     /* STOPF ´¥·¢ --------------------------------------------------------------*/
     else if((tmp3 == SET) && (tmp2 == SET))
     {
       User_I2C_Slave_STOPF(hi2c);
     }
+		
     /* I2C ÔÚ ·¢ËÍ×´Ì¬ -----------------------------------------------*/
     else if(tmp4 == SET)
     {
@@ -76,17 +90,20 @@ void USER_SLAVE_I2C_EV_IRQHandler(I2C_HandleTypeDef *hi2c)      //ÊÂ¼şÖĞ¶Ï´¦Àí
       tmp2 = __HAL_I2C_GET_IT_SOURCE(hi2c, I2C_IT_BUF);
       tmp3 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_BTF);
       tmp4 = __HAL_I2C_GET_IT_SOURCE(hi2c, I2C_IT_EVT);
+			
       /* TXE ´¥·¢ ºÍ BTF Î´´¥·¢ -----------------------------------------------*/
       if((tmp1 == SET) && (tmp2 == SET) && (tmp3 == RESET))
       {
         User_I2C_SlaveTransmit_TXE(hi2c);
       }
+			
       /* BTF ´¥·¢ -------------------------------------------------------------*/
       else if((tmp3 == SET) && (tmp4 == SET))
       {
         User_I2C_SlaveTransmit_BTF(hi2c);
       }
     }
+		
     /* I2C ÔÚ ½ÓÊÜ×´Ì¬  --------------------------------------------------*/
     else
     {
@@ -94,11 +111,13 @@ void USER_SLAVE_I2C_EV_IRQHandler(I2C_HandleTypeDef *hi2c)      //ÊÂ¼şÖĞ¶Ï´¦Àí
       tmp2 = __HAL_I2C_GET_IT_SOURCE(hi2c, I2C_IT_BUF);
       tmp3 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_BTF);
       tmp4 = __HAL_I2C_GET_IT_SOURCE(hi2c, I2C_IT_EVT);
+			
       /* RXNE ´¥·¢ ºÍ BTF Î´´¥·¢ ----------------------------------------------*/
       if((tmp1 == SET) && (tmp2 == SET) && (tmp3 == RESET))
       {
         User_I2C_SlaveReceive_RXNE(hi2c);
       }
+			
       /* BTF ´¥·¢ -------------------------------------------------------------*/
       else if((tmp3 == SET) && (tmp4 == SET))
       {
@@ -106,62 +125,55 @@ void USER_SLAVE_I2C_EV_IRQHandler(I2C_HandleTypeDef *hi2c)      //ÊÂ¼şÖĞ¶Ï´¦Àí
       }
     }
 }
-static void User_I2C_Slave_ADDR(I2C_HandleTypeDef *hi2c)        //´¦Àí ADDR FLAG
+static void User_I2C_Slave_ADDR(I2C_HandleTypeDef *hi2c)           //½ÓÊÕµ½µØÖ·ÖĞ¶Ï
 {
 	uint32_t tmp4 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_TRA);
-	if((tmp4 == SET) && (hi2c->XferCount < hi2c->XferSize))
+	if((tmp4 == SET) && (hi2c->XferCount < hi2c->XferSize))          //ÊÇ·ñÎª½ÓÊÜÁËµØÖ·µÄ·¢ËÍÄ£Ê½
 	{
 		int i = 0;
-		Buffer_Internal_Address = (*((hi2c->pBuffPtr)-1));
-	  for(i = 0; i < RW_CHUNK_SIZE; i++)
+		Buffer_Internal_Address = (*((hi2c->pBuffPtr)-1));             //ÉèÖÃµØÖ·
+	  for(i = 0; i < RW_CHUNK_SIZE; i++)                             //½«Êı¾İĞ´Èë»º³åÇø
 	  {
 		  *((hi2c->pBuffPtr)+i) = Read_MemMap(Buffer_Internal_Address + i); 
 	  }
   }
-  else if ((tmp4 == SET) && (hi2c->XferCount == hi2c->XferSize))
+  else if ((tmp4 == SET) && (hi2c->XferCount == hi2c->XferSize))   //ÊÇ·ñÎªÎ´½ÓÊÕµØÖ·µÄ·¢ËÍÄ£Ê½
 	{
 		int j = 0;
-		for(j = 0; j < RW_CHUNK_SIZE; j++)
+		for(j = 0; j < RW_CHUNK_SIZE; j++)                             //½«Êı¾İĞ´Èë»º³åÇø
 	  {
 		  *((hi2c->pBuffPtr)+j) = Read_MemMap(Buffer_Internal_Address + j); 
 	  }
 	}
-  /* Clear ADDR flag */
-  __HAL_I2C_CLEAR_ADDRFLAG(hi2c);
-	return;
+  __HAL_I2C_CLEAR_ADDRFLAG(hi2c);                                  //Çå¿Õ ADDR FLAG
+	return;                                                          //·µ»Ø
 }
 
 
-static void User_I2C_Slave_STOPF(I2C_HandleTypeDef *hi2c)                //´¦ÀíSTOPF FLAG
+static void User_I2C_Slave_STOPF(I2C_HandleTypeDef *hi2c)          //½ÓÊÜµ½Í£Ö¹ÖĞ¶Ï
 {
-  /* Disable EVT, BUF and ERR interrupt */
-  //__HAL_I2C_DISABLE_IT(hi2c, I2C_IT_EVT | I2C_IT_BUF | I2C_IT_ERR);
-  /* Clear STOPF flag */
-  __HAL_I2C_CLEAR_STOPFLAG(hi2c);
-  /* Disable Acknowledge */
-  // CLEAR_BIT(hi2c->Instance->CR1, I2C_CR1_ACK);
-  // hi2c->State = HAL_I2C_STATE_READY;
+   __HAL_I2C_CLEAR_STOPFLAG(hi2c);                                 //Çå¿Õ STOPF FLAG      
    int m = 0;
-   int n = RW_CHUNK_SIZE + 1 - hi2c->XferCount;
-	 if(n >0)
+   int n = TXRXBUFFER_SIZE - hi2c->XferCount;        
+	 if(n >0)                                                        //Èç¹û½ÓÊÜµ½ÁËÊı¾İ
 	 {
-     Buffer_Internal_Address = TxRxBuffer[0];
+     Buffer_Internal_Address = TxRxBuffer[0];                      //ÉèÖÃµØÖ·
 	 }
-	 while(m+1<n)
+	 while(m+1<n)                                                    //µ±³ıÁËµØÖ·»¹ÓĞÊı¾İÊ±
 	 {
-		 Write_MemMap(Buffer_Internal_Address+m, TxRxBuffer[m+1]);
+		 Write_MemMap(Buffer_Internal_Address+m, TxRxBuffer[m+1]);     //½«»º³åÇøÊı¾İĞ´ÈëĞéÄâ¼Ä´æÆ÷
 		 m++;
 	 }
-	 EmptyBuffer(TxRxBuffer);
-	 hi2c->pBuffPtr = TxRxBuffer;
-   hi2c->XferCount = RW_CHUNK_SIZE+1;
-   return;
+	 EmptyBuffer(TxRxBuffer);                                        //Çå¿Õ»º³åÇø
+	 hi2c->pBuffPtr = TxRxBuffer;                                    //ÉèÖÃ»º³åÇøÖ¸Õë
+   hi2c->XferCount = TXRXBUFFER_SIZE;                              //ÉèÖÃ»º³åÇø´óĞ¡
+   return;                                                         //·µ»Ø
 }
 static void User_I2C_SlaveTransmit_TXE(I2C_HandleTypeDef *hi2c)         //´¦Àí TXE FLAG
 {
   if(hi2c->XferCount != 0)
   {
-    /* Write data to DR */
+    /* ½«Êı¾İĞ´ÈëDR */
     hi2c->Instance->DR = (*hi2c->pBuffPtr++);
     hi2c->XferCount--;
   }
@@ -171,7 +183,7 @@ static void User_I2C_SlaveTransmit_BTF(I2C_HandleTypeDef *hi2c)         //´¦Àí B
 {
   if(hi2c->XferCount != 0)
   {
-    /* Write data to DR */
+    /* ½«Êı¾İĞ´ÈëDR */
     hi2c->Instance->DR = (*hi2c->pBuffPtr++);
     hi2c->XferCount--;
   }
@@ -181,7 +193,7 @@ static void User_I2C_SlaveReceive_RXNE(I2C_HandleTypeDef *hi2c)         //´¦Àí R
 {
   if(hi2c->XferCount != 0)
   {
-    /* Read data from DR */
+    /* ´ÓDR¶ÁÊı¾İ */
     (*hi2c->pBuffPtr++) = hi2c->Instance->DR;
     hi2c->XferCount--;
   }
@@ -191,34 +203,34 @@ static void User_I2C_SlaveReceive_BTF(I2C_HandleTypeDef *hi2c)           //´¦Àí 
 {
   if(hi2c->XferCount != 0)
   {
-    /* Read data from DR */
+    /* ´ÓDR¶ÁÊı¾İ */
     (*hi2c->pBuffPtr++) = hi2c->Instance->DR;
     hi2c->XferCount--;
   }
   return;
 }
-void User_HAL_I2C_ER_IRQHandler(I2C_HandleTypeDef *hi2c)                 //´íÎóÖĞ¶Ï´¦Àí
+void User_Slave_I2C_ER_IRQHandler(I2C_HandleTypeDef *hi2c)                 //´íÎóÖĞ¶Ï´¦Àí
 {
   uint32_t tmp1 = 0;
 	uint32_t tmp2 = 0;
 
   tmp1 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_BERR);
   tmp2 = __HAL_I2C_GET_IT_SOURCE(hi2c, I2C_IT_ERR);
-  /* I2C Bus error interrupt occurred ----------------------------------------*/
+  /* I2C ×ÜÏß´íÎóÖĞ¶Ï·¢Éú ----------------------------------------*/
   if((tmp1 == SET) && (tmp2 == SET))
   {
     hi2c->ErrorCode |= HAL_I2C_ERROR_BERR;
 
-    /* Clear BERR flag */
+    /* Çå³ı BERR FLAG */
     __HAL_I2C_CLEAR_FLAG(hi2c, I2C_FLAG_BERR);
     
-    /* Workaround: Start cannot be generated after a misplaced Stop */
+    /* ÔÚ´íÎ»µÄstopÖ®ºó²»ÄÜ²úÉústart */
     SET_BIT(hi2c->Instance->CR1, I2C_CR1_SWRST);
   }
 
   tmp1 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_ARLO);
   tmp2 = __HAL_I2C_GET_IT_SOURCE(hi2c, I2C_IT_ERR);
-  /* I2C Arbitration Loss error interrupt occurred ---------------------------*/
+  /* I2C Arbitration Loss ´íÎóÖĞ¶Ï·¢Éú ---------------------------*/
   if((tmp1 == SET) && (tmp2 == SET))
   {
     hi2c->ErrorCode |= HAL_I2C_ERROR_ARLO;
@@ -229,33 +241,33 @@ void User_HAL_I2C_ER_IRQHandler(I2C_HandleTypeDef *hi2c)                 //´íÎóÖ
 
   tmp1 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_AF);
   tmp2 = __HAL_I2C_GET_IT_SOURCE(hi2c, I2C_IT_ERR);
-  /* I2C Acknowledge failure error interrupt occurred ------------------------*/
+  /* I2C Î´ÏìÓ¦´íÎóÖĞ¶Ï·¢Éú ------------------------*/
   if((tmp1 == SET) && (tmp2 == SET))
   {
     tmp1 = hi2c->Mode;
     if(tmp1 == HAL_I2C_MODE_SLAVE)
     {
-      User_I2C_Slave_AF(hi2c);
+      User_I2C_Slave_AF(hi2c);                     //×Ô¶¨ÒåÎ´ÏìÓ¦ÖĞ¶Ï
     }
     else
     {
       hi2c->ErrorCode |= HAL_I2C_ERROR_AF;
   
-      /* Generate Stop */
+      /* ²úÉúÍ£Ö¹ */
       SET_BIT(hi2c->Instance->CR1,I2C_CR1_STOP);
   
-      /* Clear AF flag */
+      /* Çå³ı AF FLAG */
       __HAL_I2C_CLEAR_FLAG(hi2c, I2C_FLAG_AF);
     }
   }
 
   tmp1 = __HAL_I2C_GET_FLAG(hi2c, I2C_FLAG_OVR);
   tmp2 = __HAL_I2C_GET_IT_SOURCE(hi2c, I2C_IT_ERR);
-  /* I2C Over-Run/Under-Run interrupt occurred -------------------------------*/
+  /* I2C Over-Run/Under-Run ÖĞ¶Ï·¢Éú -------------------------------*/
   if((tmp1 == SET) && (tmp2 == SET))
   {
     hi2c->ErrorCode |= HAL_I2C_ERROR_OVR;
-    /* Clear OVR flag */
+    /* Çå³ı OVR FLAG */
     __HAL_I2C_CLEAR_FLAG(hi2c, I2C_FLAG_OVR);
   }
 
@@ -263,27 +275,18 @@ void User_HAL_I2C_ER_IRQHandler(I2C_HandleTypeDef *hi2c)                 //´íÎóÖ
   {
     hi2c->State = HAL_I2C_STATE_READY;
     
-    /* Disable Pos bit in I2C CR1 when error occured in Master/Mem Receive IT Process */
+    /* µ±ÖĞ¶Î´íÎó·¢ÉúÊ±Ê§ÄÜ Pos Î» */
     CLEAR_BIT(hi2c->Instance->CR1, I2C_CR1_POS);
     
     HAL_I2C_ErrorCallback(hi2c);
   }
 }
-static void User_I2C_Slave_AF(I2C_HandleTypeDef *hi2c)                       //´¦Àí AF FlAG
+static void User_I2C_Slave_AF(I2C_HandleTypeDef *hi2c)                       //Î´ÏìÓ¦ÖĞ¶Ï
 {
-  /* Disable EVT, BUF and ERR interrupt */
-  //__HAL_I2C_DISABLE_IT(hi2c, I2C_IT_EVT | I2C_IT_BUF | I2C_IT_ERR);
+  __HAL_I2C_CLEAR_FLAG(hi2c, I2C_FLAG_AF);                                   //Çå¿Õ AF FLAG
 
-  /* Clear AF flag */
-  __HAL_I2C_CLEAR_FLAG(hi2c, I2C_FLAG_AF);
-
-  /* Disable Acknowledge */
-  //CLEAR_BIT(hi2c->Instance->CR1, I2C_CR1_ACK);
-
-  //hi2c->State = HAL_I2C_STATE_READY;
-	
-  EmptyBuffer(TxRxBuffer);
-  hi2c->pBuffPtr = TxRxBuffer;
-  hi2c->XferCount = RW_CHUNK_SIZE+1;
+  EmptyBuffer(TxRxBuffer);                                                   //Çå¿Õ»º³åÇø
+  hi2c->pBuffPtr = TxRxBuffer;                                               //ÉèÖÃ»º³åÇøÖ¸Õë
+  hi2c->XferCount = TXRXBUFFER_SIZE;                                         //ÉèÖÃ»º³åÇø´óĞ¡
   return;
 }

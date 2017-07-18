@@ -108,10 +108,10 @@ int main(void)
   MX_ADC1_Init();
 
   /* USER CODE BEGIN 2 */
-	Module_Init();
+	Module_Init();                                                   //初始化模块
 	if(hi2c1.State == HAL_I2C_STATE_READY)
 	{
-		I2C_Slave_Transreceiver_IT_Iniitialize(&hi2c1);
+		I2C_Slave_Transreceiver_IT_Initialize(&hi2c1);                 //进入上位机I2C待命模式
 	}
   /* USER CODE END 2 */
 
@@ -119,8 +119,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    //SetLatchTxfault(&hi2c2);
-		//SetLatchTempHighAlarm(&hadc1);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
