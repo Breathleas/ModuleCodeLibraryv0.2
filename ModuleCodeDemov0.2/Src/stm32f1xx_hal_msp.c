@@ -44,6 +44,8 @@ extern DMA_HandleTypeDef hdma_adc1;
 extern void _Error_Handler(char *, int);
 /* USER CODE BEGIN 0 */
 
+//这个函数提供了许多功能的硬件底层实现（需要改动关于I2C的部分）
+
 /* USER CODE END 0 */
 /**
   * Initializes the Global MSP.
@@ -79,7 +81,7 @@ void HAL_MspInit(void)
   //__HAL_AFIO_REMAP_SWJ_DISABLE();
 
   /* USER CODE BEGIN MspInit 1 */
-
+  //注释掉禁用JTAG
   /* USER CODE END MspInit 1 */
 }
 

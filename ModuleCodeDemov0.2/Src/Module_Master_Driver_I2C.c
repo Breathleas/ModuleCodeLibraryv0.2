@@ -1,5 +1,5 @@
 
-//这个头文件存放了与 Tx Driver 芯片通信的函数的具体实现
+//这个c文件存放了与 Tx Driver 芯片通信的函数的具体实现
 
 #include "Module_Master_Driver_I2C.h"
 #include "utilities.h"
@@ -189,7 +189,7 @@ void SetCurrentMonitor(I2C_HandleTypeDef *hi2c,uint8_t currentType, uint8_t chan
 			 HAL_I2C_Mem_Write(hi2c, GN1185_ADDRESS, 0x0A, I2C_MEMADD_SIZE_8BIT, &Buffer, 1, 20);
 		}
 		else if(channel == Channel_2)
-		{
+		{ 
        Buffer = 0x09;
 			 HAL_I2C_Mem_Write(hi2c, GN1185_ADDRESS, 0x0A, I2C_MEMADD_SIZE_8BIT, &Buffer, 1, 20);
 		}

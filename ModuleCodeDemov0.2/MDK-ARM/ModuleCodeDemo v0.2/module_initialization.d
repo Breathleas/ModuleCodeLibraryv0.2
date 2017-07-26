@@ -31,3 +31,4 @@ modulecodedemo v0.2\module_initialization.o: ../Drivers/STM32F1xx_HAL_Driver/Inc
 modulecodedemo v0.2\module_initialization.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 modulecodedemo v0.2\module_initialization.o: ../Inc/utilities.h
 modulecodedemo v0.2\module_initialization.o: ../Inc/constant.h
+modulecodedemo v0.2\module_initialization.o: ../Inc/Module_Master_CDR.h

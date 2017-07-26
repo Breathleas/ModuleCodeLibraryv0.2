@@ -40,12 +40,16 @@
 #include "stm32f1xx_hal.h"
 
 /* USER CODE BEGIN Includes */
+
+//将所有的需要模块执行的命令放入这主函数
+
 #include "constant.h"
 #include "Module_Slave_I2C.h"
 #include "Module_MemMap.h"
 #include "Module_Initialization.h"
 #include "Module_Master_CDR.h"
 #include "utilities.h"
+
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -108,8 +112,9 @@ int main(void)
   MX_ADC1_Init();
 
   /* USER CODE BEGIN 2 */
-	Module_Init();                                                   //初始化模块
-	if(hi2c1.State == HAL_I2C_STATE_READY)
+	Module_Init_Hardware();                                          //初始化版上硬件
+	Module_Init_Register();                                          //初始化模块
+	if(hi2c1.State == HAL_I2C_STATE_READY)                           //如果与上位机沟通的I2C空闲
 	{
 		I2C_Slave_Transreceiver_IT_Initialize(&hi2c1);                 //进入上位机I2C待命模式
 	}
@@ -119,7 +124,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-  /* USER CODE END WHILE */
+		//检查温度 
+		//检查提供电压                                 （可选）
+		//检查调制电压                                 （可选）
+		//检查各条路上的偏执和调制电流是否正常         （可选）
+  /* USER CODE END WHILE */ 
 
   /* USER CODE BEGIN 3 */
 

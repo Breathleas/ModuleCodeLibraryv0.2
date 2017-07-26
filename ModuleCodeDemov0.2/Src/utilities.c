@@ -17,7 +17,7 @@
 //高温预警位
 static uint8_t latch_temp_high_alarm = 0;
 
-//清空数组
+//清空缓冲区
 void EmptyBuffer(uint8_t* a)
 {
 	int i = 0;
@@ -71,7 +71,7 @@ uint8_t IsModSelL(void)                //1不接受数据，0接收数据
 }
 
 //断言IntL
-void Assert_IntL(void)
+void Assert_IntL(void)                 //低电平
 {
 	HAL_GPIO_WritePin(IntL_GPIO_Port, IntL_Pin, GPIO_PIN_RESET);
 	uint8_t u = Internal_Read_MemMap(2);
@@ -80,7 +80,7 @@ void Assert_IntL(void)
 }
 
 //反断言IntL
-void Deassert_IntL(void)
+void Deassert_IntL(void)               //高电平
 {
 	HAL_GPIO_WritePin(IntL_GPIO_Port, IntL_Pin, GPIO_PIN_SET);
 	uint8_t u = Internal_Read_MemMap(2);
@@ -110,7 +110,7 @@ void Data_Not_Ready(void)
 	Internal_Write_MemMap(2,u);
 }
 
-//是否低功耗模式
+//是否低功耗模式pin为高
 uint8_t IsLPMode(void)
 {
 	return HAL_GPIO_ReadPin(LPMode_GPIO_Port, LPMode_Pin);

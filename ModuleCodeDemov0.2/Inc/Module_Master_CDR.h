@@ -32,30 +32,46 @@
 #define GN2104_ADDRESS_SIZE                   I2C_MEMADD_SIZE_16BIT                 //数据大小
 
 
-void SetLatchTxfault(I2C_HandleTypeDef *hi2c);                             //设置 Tx Fault
+void SetLatchTxfault(void);                             //设置 Tx Fault
 
-uint8_t GetLatchTxFault(I2C_HandleTypeDef *hi2c);                          //获取 Tx Fault
+uint8_t GetLatchTxFault(void);                          //获取 Tx Fault
 
-void ClearLatchTxfault(void);                                              //清空 Tx Fault
+void ClearLatchTxfault(void);                           //清空 Tx Fault
 
 //以下函数还未实现，将会在调试的时候（v0.3）进行处理
 
-void CDRPowerUp(I2C_HandleTypeDef *hi2c, uint8_t channel);                    //打开CDR
+void PowerUp(I2C_HandleTypeDef *hi2c, uint8_t channel);                                    //打开总线和模拟电路电源
 
-void CDRPowerDown(I2C_HandleTypeDef *hi2c, uint8_t channel);                  //关闭CDR
+void PowerDown(I2C_HandleTypeDef *hi2c, uint8_t channel);                                  //关闭总线和模拟电路电源
 
-void SetLosThres(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t value);
+void LOSPowerUp(I2C_HandleTypeDef *hi2c, uint8_t channel);                                 //打开 LOS 检测
 
-void SetLosHyst(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t value);
+void LOSPowerDown(I2C_HandleTypeDef *hi2c, uint8_t channel);                               //关闭 LOS 检测
 
-void CDRBypass(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t state);      //跳过CDR
+void CDRPowerUp(I2C_HandleTypeDef *hi2c, uint8_t channel);                                 //打开CDR
+ 
+void CDRPowerDown(I2C_HandleTypeDef *hi2c, uint8_t channel);                               //关闭CDR
 
-void SetEqulizer(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t value);
+void SetLosThres(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t value);                 //设置LOS门槛
 
-void SetDriverMute(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t state); 
+void SetLosHyst(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t value);                  //设置LOS滞后
 
-void SetDriverDeemp(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t value);
+void CDRBypass(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t state);                   //跳过CDR
 
-void SetDeempPrePostCursor(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t PreorPost);
+void SetEqulizer(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t value);                 //设置补偿器
+
+void SetDriverMute(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t state);               //设置Driver沉默
+
+void SetDriverDeemp(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t value);              //设置去加重
+
+void SetDeempPrePostCursor(I2C_HandleTypeDef *hi2c, uint8_t channel, uint8_t PreorPost);   //设置去加重前后
+
+uint8_t GetTxLOSCDR(I2C_HandleTypeDef *hi2c, uint8_t channel);                             //读取TxLOS
+
+uint8_t GetRxLOSCDR(I2C_HandleTypeDef *hi2c, uint8_t channel);                             //读取RxLOS
+
+uint8_t GetTxLOLCDR(I2C_HandleTypeDef *hi2c, uint8_t channel);                             //读取TxLOL
+
+uint8_t GetRxLOLCDR(I2C_HandleTypeDef *hi2c, uint8_t channel);                             //读取RxLOL
 
 #endif

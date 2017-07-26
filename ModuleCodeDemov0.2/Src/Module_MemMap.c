@@ -9,7 +9,7 @@
 #include "utilities.h"
 #include "Module_Master_Driver_I2C.h"
 
-//v0.2 °æ Ö»Ö§³Ö SFF8636ÖĞ ¶¨ÒåµÄ×î¼ò¹¦ÄÜ£¬Memory Map¹²ÓĞ256¸ö×Ö½Ú¡£
+//v0.3 °æ Ö»Ö§³Ö SFF8636ÖĞ ¶¨ÒåµÄ×î¼ò¹¦ÄÜ£¬Memory Map¹²ÓĞ256¸ö×Ö½Ú¡£
 //Ö»¶ÁÇøÓò
 #define RO_START_ADDRESS_1    0
 #define RO_STOP_ADDRESS_1    85
@@ -44,7 +44,7 @@ uint8_t Read_MemMap(int Memory_Address)                               //Íâ²¿¶ÁĞé
 	}
 	else if (Memory_Address == (INTERRUPT_FLAG + 1))                    //¶Áµ½ÁËTx_FaultµÄ¼Ä´æÆ÷
 	{
-		*(MemMap_Array + Memory_Address) = GetLatchTxFault(&hi2c2);       //»ñÈ¡ Tx_Fault
+		*(MemMap_Array + Memory_Address) = GetLatchTxFault();             //»ñÈ¡ Tx_Fault
 		 ClearLatchTxfault();                                             //Çå³ı Tx_Fault
 		 Deassert_IntL();                                                 //·´¶ÏÑÔ IntL
 	}
@@ -75,7 +75,7 @@ uint8_t Write_MemMap(int Memory_Address, uint8_t value)               //Íâ²¿Ğ´Ğé
 		if(Memory_Address == CONTROL)                                     //Ğ´ControlÎ»ºóµÄÒ»Ğ©²Ù×÷£¨Î´Íê³É£©
 		{
 			/*
-		  if((value &  0x08) != 0)
+		  if((value &  0x08) != 0)                                        //½ûÓÃ/ÆôÓÃTx3
 			{
 			  TxDisable(&hi2c2,Channel_3);
 			}
@@ -83,7 +83,7 @@ uint8_t Write_MemMap(int Memory_Address, uint8_t value)               //Íâ²¿Ğ´Ğé
 			{
 				TxEnable(&hi2c2,Channel_3);
 			}
-		  if((value &  0x04) != 0)
+		  if((value &  0x04) != 0)                                        //½ûÓÃ/ÆôÓÃTx2
 			{
 			  TxDisable(&hi2c2,Channel_2);			  
 			}
@@ -91,7 +91,7 @@ uint8_t Write_MemMap(int Memory_Address, uint8_t value)               //Íâ²¿Ğ´Ğé
 			{
 				TxEnable(&hi2c2,Channel_2);
 			}
-		  if((value &  0x02) != 0)
+		  if((value &  0x02) != 0)                                        //½ûÓÃ/ÆôÓÃTx1
 			{
 			  TxDisable(&hi2c2,Channel_1);			  
 			}
@@ -99,7 +99,7 @@ uint8_t Write_MemMap(int Memory_Address, uint8_t value)               //Íâ²¿Ğ´Ğé
 			{
 				TxEnable(&hi2c2,Channel_1);
 			}
-      if((value &  0x01) != 0)
+      if((value &  0x01) != 0)                                        //½ûÓÃ/ÆôÓÃTx0
 			{
 			  TxDisable(&hi2c2,Channel_0);			  
 		  }
@@ -161,5 +161,7 @@ uint8_t Internal_Read_MemMap(int Memory_Address)                     //ÄÚ²¿¶ÁĞéÄ
 
 uint8_t Is_MemMap_Error(void)                                        //·µ»Ø´íÎó´úÂë
 { 
-	return status_code;                                       
+	uint8_t s = status_code;
+	status_code = 0;                                                   //Çå¿Õ´íÎó´úÂë
+	return s;                                       
 }

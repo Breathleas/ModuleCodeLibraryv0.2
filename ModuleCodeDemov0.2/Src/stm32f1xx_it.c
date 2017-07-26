@@ -228,7 +228,7 @@ void EXTI1_IRQHandler(void)
 	}
 	else                                                     //如果为1
 	{
-		if(IsLPMode_Overriade() == 0)                          //如果已覆盖
+		if(IsLPMode_Overriade() == 0)                          //如果未覆盖
 		{
 		  LowPowerMode();                                      //低功率
 		}

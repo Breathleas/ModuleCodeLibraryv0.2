@@ -235,7 +235,7 @@ void User_Slave_I2C_ER_IRQHandler(I2C_HandleTypeDef *hi2c)                 //´íÎ
   {
     hi2c->ErrorCode |= HAL_I2C_ERROR_ARLO;
 
-    /* Clear ARLO flag */
+    /* Çå³ý ARLO flag */
     __HAL_I2C_CLEAR_FLAG(hi2c, I2C_FLAG_ARLO);
   }
 
